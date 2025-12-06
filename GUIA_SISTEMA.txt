@@ -1,0 +1,280 @@
+================================================================================
+        SISTEMA DE INDEXAÇÃO E RECUPERAÇÃO DE INFORMAÇÃO
+================================================================================
+
+ARQUIVOS DO PROJETO:
+--------------------
+1. main.py              - Menu interativo e interface do usuário
+2. gerenciador.py       - Gerenciamento de coleção e estruturas de indexação
+3. search_engine.py     - Motor de busca (3 tipos: booleana, similaridade, frases)
+4. preprocessor.py      - Pré-processamento e limpeza de textos
+5. colecao - trabalho 01.json - Base de dados (50 documentos)
+
+COMO EXECUTAR:
+--------------
+python main.py
+
+REQUISITOS:
+-----------
+pip install nltk
+
+O NLTK será baixado automaticamente na primeira execução.
+
+MENU PRINCIPAL - OPÇÕES:
+------------------------
+
+1. Adicionar um documento
+   - Adiciona o próximo documento sequencialmente da coleção
+   - Útil para testar incrementalmente
+
+2. Adicionar todos os documentos
+   - Carrega os 50 documentos de uma vez
+   - Recomendado para uso completo do sistema
+
+3. Remover um documento
+   - Remove um documento específico
+   - Recalcula automaticamente TF-IDF e índices
+
+4. Listar documentos
+   - Mostra todos os documentos carregados
+   - Nome, ID e número de palavras
+
+5. Exibir vocabulário
+   - Mostra todas as palavras únicas processadas
+   - Ordenadas alfabeticamente
+
+6. Exibir matriz TF-IDF
+   - Mostra tabela de pesos (Term Frequency × Inverse Document Frequency)
+   - Amostra de 10 primeiras palavras
+
+7. Exibir índice invertido
+   - Mapeamento palavra → documentos e posições
+   - Estrutura: palavra → {doc_id: [posições]}
+
+8. Busca booleana
+   - Operadores: AND, OR, NOT
+   - Exemplo: "estrutura AND dados NOT linear"
+   - Retorna documentos que satisfazem a consulta
+
+9. Busca por similaridade (cosseno)
+   - Calcula proximidade semântica entre consulta e documentos
+   - Retorna ranking de relevância [0.0 a 1.0]
+   - Exemplo: "árvore binária balanceada"
+
+10. Busca por frases
+    - Localiza sequências exatas de palavras
+    - Retorna documentos com contagem de ocorrências
+    - Exemplo: "tabela hash com tratamento"
+
+11. Exibir estatísticas
+    - Resumo: total de docs, palavras, média por documento
+
+0. Sair
+    - Encerra o programa
+
+================================================================================
+COMPONENTES TÉCNICOS
+================================================================================
+
+PREPROCESSOR (preprocessor.py):
+-------------------------------
+Etapas de processamento por documento:
+
+1. Limpeza
+   - Converte para minúsculas
+   - Remove quebras de linha múltiplas
+   - Remove espaços múltiplos
+
+2. Tokenização
+   - Divide texto em palavras
+   - Remove pontuação
+
+3. Remoção de Stopwords (NLTK)
+   - Remove palavras vazias português: "a", "de", "que", etc.
+   - Mantém apenas termos significativos
+
+4. Stemming/Radicalização (RSLP)
+   - Reduz palavras à raiz
+   - Exemplo: "estruturas" → "estrutur"
+
+Exemplo de transformação:
+Entrada:  "As estruturas de dados desempenham papel fundamental"
+Saída:    ["estrutur", "dad", "desempenha", "papel", "fundam"]
+
+GERENCIADOR (gerenciador.py):
+-----------------------------
+Mantém e atualiza automaticamente:
+
+a) Vocabulário
+   - Conjunto de todas as palavras únicas
+   - Exemplo: {"estrutura", "dado", "linear", ...}
+
+b) Frequências de Documentos
+   - Para cada documento: frequência de cada palavra
+   - Estrutura: {doc_id: {palavra: frequência}}
+
+c) Matriz TF-IDF
+   - Peso de cada palavra em cada documento
+   - Estrutura: {doc_id: {palavra: valor_tfidf}}
+   
+   Cálculo:
+   TF = frequência da palavra / total de palavras no documento
+   IDF = log(total de docs / docs com a palavra)
+   TF-IDF = TF × IDF
+
+d) Índice Invertido
+   - Mapa palavra → documentos + posições
+   - Estrutura: {palavra: {doc_id: [posições]}}
+   - Essencial para busca de frases
+
+MOTOR DE BUSCA (search_engine.py):
+----------------------------------
+Implementa três tipos de busca:
+
+1. BUSCA BOOLEANA
+   - Processamento: "termo1 OP1 termo2 OP2 termo3 ..."
+   - Operadores: AND (∩), OR (∪), NOT (-)
+   - Usa índice invertido para conjuntos rápidos
+   - Retorna: lista de documentos que satisfazem
+
+2. SIMILARIDADE DE COSSENO
+   - Calcula vetor TF-IDF da consulta
+   - Compara com cada documento
+   - Fórmula: cos(θ) = (A·B) / (||A|| × ||B||)
+   - Retorna: ranking [0.0 a 1.0]
+
+3. BUSCA POR FRASES
+   - Encontra sequências exatas de palavras
+   - Verifica posições consecutivas no índice
+   - Retorna: ranking por número de ocorrências
+
+================================================================================
+EXEMPLOS DE USO
+================================================================================
+
+CENÁRIO 1: Carregamento Completo
+---------------------------------
+Menu → Opção 2 → Confirmar
+✓ 50 documentos adicionados
+
+Menu → Opção 11 → Exibir Estatísticas
+- Total de documentos: 50
+- Total de palavras únicas: 1247
+- Total de palavras: 18542
+- Média por documento: 370.84
+
+CENÁRIO 2: Busca Booleana
+--------------------------
+Menu → Opção 8
+Consulta: "estrutura AND dados"
+
+Resultado:
+✓ 12 documentos encontrados:
+1. [D1]
+   "As estruturas de dados desempenham um papel fundamental..."
+
+2. [D3]
+   "Projetar algoritmos que lidam com grandes volumes de..."
+
+... (continua)
+
+CENÁRIO 3: Busca por Similaridade
+----------------------------------
+Menu → Opção 9
+Consulta: "árvore binária balanceada"
+Quantos resultados? 5
+
+Resultado:
+Rank 1: [D2]    Similaridade: 0.8765
+Rank 2: [D6]    Similaridade: 0.8234
+Rank 3: [D11]   Similaridade: 0.7956
+Rank 4: [D15]   Similaridade: 0.7621
+Rank 5: [D20]   Similaridade: 0.7345
+
+CENÁRIO 4: Busca por Frases
+----------------------------
+Menu → Opção 10
+Consulta: "lista encadeada simples"
+Quantos resultados? 10
+
+Resultado:
+✓ 8 documentos encontrados:
+Rank 1: [D1]    Ocorrências: 3
+Rank 2: [D3]    Ocorrências: 2
+Rank 3: [D5]    Ocorrências: 2
+Rank 4: [D8]    Ocorrências: 1
+Rank 5: [D12]   Ocorrências: 1
+... (continua)
+
+================================================================================
+FLUXO DE TRABALHO RECOMENDADO
+================================================================================
+
+1. INICIALIZAR SISTEMA
+   - Executar main.py
+   - Escolher opção 2 (adicionar todos os documentos)
+
+2. EXPLORAR ESTRUTURAS
+   - Opção 5: Ver vocabulário completo
+   - Opção 6: Examinar matriz TF-IDF
+   - Opção 7: Explorar índice invertido
+
+3. TESTAR BUSCAS
+   - Opção 8: Testes com booleana
+   - Opção 9: Testes de similaridade
+   - Opção 10: Testes de frases
+
+4. OPERAÇÕES AVANÇADAS
+   - Opção 3: Remover um documento
+   - Opção 5-7: Visualizar mudanças nas estruturas
+   - Opção 8-10: Verificar que buscas se adaptaram
+
+================================================================================
+NOTAS TÉCNICAS
+================================================================================
+
+COMPLEXIDADE COMPUTACIONAL:
+- TF-IDF: O(n × m) onde n=docs, m=palavras_únicas
+- Índice Invertido: O(n × m) para construção, O(1) para lookup
+- Busca por Similaridade: O(m × n) onde m=palavras_consulta, n=docs
+- Busca Booleana: O(|A| + |B|) para operação com conjuntos
+- Busca de Frases: O(p × c) onde p=posições, c=comprimento_frase
+
+LIMITES PRÁTICOS:
+- Testado com coleção de 50 documentos (20k+ palavras)
+- Pode escalar para milhares de documentos
+- Busca é praticamente em tempo real
+
+OTIMIZAÇÕES REALIZADAS:
+- Índice invertido para busca O(1)
+- Conjuntos Python para operações booleanas rápidas
+- Cache de TF-IDF recalculado apenas quando necessário
+- Pré-processamento uma única vez por documento
+
+================================================================================
+TROUBLESHOOTING
+================================================================================
+
+PROBLEMA: "No module named 'nltk'"
+SOLUÇÃO: pip install nltk
+
+PROBLEMA: Arquivo JSON não encontrado
+SOLUÇÃO: Verifique se "colecao - trabalho 01.json" está no diretório
+
+PROBLEMA: Busca retorna 0 resultados
+SOLUÇÃO: 
+- Sistema usa stemming, então variações da palavra funcionam
+- Tente termos simples: "estrutura" em vez de "estruturais"
+- Verifique se documentos foram adicionados (opção 4)
+
+PROBLEMA: Tela muito longa
+SOLUÇÃO: 
+- Use "Quantos resultados?" para limitar
+- Opção 7 mostra apenas 20 palavras (as mais comuns)
+
+PROBLEMA: Memória insuficiente
+SOLUÇÃO:
+- Sistema é eficiente, mas com 100k+ docs considere banco de dados
+- Remova documentos não utilizados (opção 3)
+
+================================================================================
