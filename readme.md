@@ -6,6 +6,15 @@ indexação e recuperação de informação que seria capaz de manipular dinamic
 coleção de documentos. O sistema teria que possibilitar a construção e atualização do vocabulário, assim como a construção da matriz TF-IDF e do índice invertido, sempre que documentos fossem inseridos ou removidos. As buscas contemplam consultas booleanas, consultas por 
 similaridade e consultas por frases.
 ***
+
+## Orientações sobre o sistema
+
+- [Código fonte](./main.py)
+- [Manual de uso do sistema](./GUIA_SISTEMA.txt)
+- [Implementação explicada](./LEIA-ME.txt)
+
+***
+
 ## Funcionalidades obrigatórias
  
 1) Leitura dos documentos pelo arquivo ‘colecao - trabalho 01.json’. 
