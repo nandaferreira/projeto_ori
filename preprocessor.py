@@ -3,6 +3,12 @@ import nltk
 from nltk.corpus import stopwords
 from nltk.stem import RSLPStemmer
 
+# Ana Alice Cordeiro - 12211BCC028;
+# Bruno Castro - 12211BCC004;
+# Ester Freitas - 12211BCC036;
+# Fernanda Ferreira - 12211BCC043;
+# João Vitor Feijó - 12311BCC061
+
 # Download de dados necessários
 try:
     nltk.data.find('corpora/stopwords')
@@ -44,7 +50,7 @@ class Preprocessor:
     def remover_pontuacao(self, texto):
         """Remove pontuação mantendo apenas palavras e números"""
         # Remove pontuação mas mantém hífens e apóstrofos para palavras compostas
-        texto = re.sub(r'[^\w\s\-\']', ' ', texto)
+        texto = re.sub(r'[^a-zà-úÀ-Ú\s]', '', texto)
         return texto
     
     def tokenizar(self, texto):

@@ -3,6 +3,12 @@ import math
 from collections import defaultdict
 from preprocessor import Preprocessor
 
+# Ana Alice Cordeiro - 12211BCC028;
+# Bruno Castro - 12211BCC004;
+# Ester Freitas - 12211BCC036;
+# Fernanda Ferreira - 12211BCC043;
+# João Vitor Feijó - 12311BCC061
+
 
 class GerenciadorColecao:
     """Gerencia a coleção de documentos e suas estruturas de indexação"""
@@ -49,7 +55,7 @@ class GerenciadorColecao:
         self._atualizar_vocabulario(doc_id, palavras_processadas)
         self._atualizar_frequencias(doc_id, palavras_processadas)
         self._atualizar_indice_invertido(doc_id, palavras_processadas)
-        self._atualizar_tfidf(doc_id)
+        self._recalcular_tfidf_completo()
     
     def remover_documento(self, doc_id):
         """Remove um documento da coleção e atualiza todas as estruturas"""

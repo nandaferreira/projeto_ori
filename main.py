@@ -2,6 +2,11 @@ from gerenciador import GerenciadorColecao
 from search_engine import MotorBusca
 import json
 
+# Ana Alice Cordeiro - 12211BCC028;
+# Bruno Castro - 12211BCC004;
+# Ester Freitas - 12211BCC036;
+# Fernanda Ferreira - 12211BCC043;
+# João Vitor Feijó - 12311BCC061
 
 class MenuPrincipal:
     """Interface interativa do sistema de indexação"""
