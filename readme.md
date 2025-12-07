@@ -36,7 +36,7 @@ ranqueamento dos documentos retornados.
 
 ## Interações do menu
 
-O usuário tinha que poder acessar as seguintes opções:
+O usuário tem as opções de:
 
 1) Adicionar um documento por vez à coleção (seguindo a ordem do JSON). 
 2) Adicionar todos os documentos da lista. 
