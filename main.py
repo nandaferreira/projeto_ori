@@ -9,8 +9,6 @@ import json
 # João Vitor Feijó - 12311BCC061
 
 class MenuPrincipal:
-    """Interface interativa do sistema de indexação"""
-    
     def __init__(self):
         self.gerenciador = GerenciadorColecao()
         self.motor_busca = MotorBusca(self.gerenciador)
@@ -18,7 +16,6 @@ class MenuPrincipal:
         self.indice_atual = -1
     
     def carregar_colecao(self):
-        """Carrega a coleção do arquivo JSON"""
         self.documentos_json = self.gerenciador.carregar_json("colecao - trabalho 01.json")
         if not self.documentos_json:
             print("Nenhum documento foi carregado!")
@@ -27,14 +24,13 @@ class MenuPrincipal:
         return True
     
     def exibir_menu_principal(self):
-        """Exibe o menu principal"""
         while True:
             print("\n" + "="*60)
-            print("         SISTEMA DE INDEXAÇÃO E RECUPERAÇÃO")
+            print("         Sistema de Indexação e Recuperação de Documentos")
             print("="*60)
             print(f"Status: {len(self.gerenciador.documentos)} documentos na coleção")
             print("-"*60)
-            print("1.  Adicionar um documento (sequencial)")
+            print("1.  Adicionar um documento")
             print("2.  Adicionar todos os documentos")
             print("3.  Remover um documento")
             print("4.  Listar documentos da coleção")
@@ -73,13 +69,13 @@ class MenuPrincipal:
             elif opcao == "11":
                 self.exibir_estatisticas()
             elif opcao == "0":
-                print("\n✓ Encerrando o sistema...")
+                print("\nEncerrando o sistema...")
                 break
             else:
                 print("❌ Opção inválida!")
     
     def adicionar_um_documento(self):
-        """Adiciona o próximo documento sequencialmente"""
+        #adiciona o proximo documento
         if self.indice_atual + 1 >= len(self.documentos_json):
             print("❌ Todos os documentos já foram adicionados!")
             return
@@ -97,7 +93,6 @@ class MenuPrincipal:
         print(f"  Progresso: {self.indice_atual + 1}/{len(self.documentos_json)}")
     
     def adicionar_todos_documentos(self):
-        """Adiciona todos os documentos à coleção"""
         confirmacao = input("Adicionar todos os documentos? (s/n): ").strip().lower()
         if confirmacao != 's':
             return
@@ -110,10 +105,9 @@ class MenuPrincipal:
         print(f"✓ {quantidade_adicionada} documentos adicionados com sucesso!")
     
     def remover_documento(self):
-        """Remove um documento da coleção"""
         docs = self.gerenciador.listar_documentos()
         if not docs:
-            print("❌ Nenhum documento na coleção!")
+            print("Nenhum documento na coleção!")
             return
         
         print("\nDocumentos disponíveis:")
@@ -125,14 +119,13 @@ class MenuPrincipal:
             self.gerenciador.remover_documento(doc_id)
             self.indice_atual -= 1 if doc_id <= self.indice_atual else 0
         except ValueError:
-            print("❌ ID inválido!")
+            print("ID inválido!")
     
     def listar_documentos(self):
-        """Lista todos os documentos da coleção"""
         docs = self.gerenciador.listar_documentos()
         
         if not docs:
-            print("❌ Nenhum documento na coleção!")
+            print("Nenhum documento na coleção!")
             return
         
         print("\n" + "="*60)
@@ -147,11 +140,10 @@ class MenuPrincipal:
             print(f"{doc['id']:>3} | {nome:>10} | {doc['palavras']:>12} | {conteudo}...")
     
     def exibir_vocabulario(self):
-        """Exibe o vocabulário completo da coleção"""
         vocab = self.gerenciador.obter_vocabulario_ordenado()
         
         if not vocab:
-            print("❌ Vocabulário vazio!")
+            print("Vocabulário vazio!")
             return
         
         print("\n" + "="*60)
@@ -159,16 +151,16 @@ class MenuPrincipal:
         print("="*60)
         print(f"Total de palavras únicas: {len(vocab)}\n")
         
-        # Exibe em colunas
+        #pra exibir em colunas
         cols = 4
         for i in range(0, len(vocab), cols):
             linha = vocab[i:i+cols]
             print("  |  ".join(f"{p:20s}" for p in linha))
     
     def exibir_matriz_tfidf(self):
-        """Exibe a matriz TF-IDF completa"""
+        #matrixz idf
         if not self.gerenciador.documentos:
-            print("❌ Nenhum documento na coleção!")
+            print("Nenhum documento na coleção!")
             return
         
         dados, vocab = self.gerenciador.obter_matriz_tfidf_tabular()
@@ -178,7 +170,6 @@ class MenuPrincipal:
         print("="*80)
         print(f"Documentos: {len(dados)} | Palavras: {len(vocab)}\n")
         
-        # Exibe um resumo (primeiras palavras)
         palavras_exibir = vocab[:10]
         
         print(f"{'Documento':<12}", end="")
@@ -202,11 +193,11 @@ class MenuPrincipal:
             print(f"\n[Mostrando primeiras {len(palavras_exibir)} de {len(vocab)} palavras]")
     
     def exibir_indice_invertido(self):
-        """Exibe o índice invertido completo"""
+        #indice invertido
         indice = self.gerenciador.obter_indice_invertido_formatado()
         
         if not indice:
-            print("❌ Índice invertido vazio!")
+            print("Índice invertido vazio!")
             return
         
         print("\n" + "="*60)
@@ -214,7 +205,6 @@ class MenuPrincipal:
         print("="*60)
         print(f"Total de palavras: {len(indice)}\n")
         
-        # Exibe número de palavras na tela
         limite = min(20, len(indice))
         palavras = list(indice.keys())[:limite]
         
@@ -231,7 +221,6 @@ class MenuPrincipal:
             print(f"\n[Mostrando {limite} de {len(indice)} palavras. Use uma palavra específica para detalhes]")
     
     def busca_booleana(self):
-        """Realiza uma busca booleana"""
         print("\n" + "="*60)
         print("BUSCA BOOLEANA")
         print("="*60)
@@ -248,7 +237,7 @@ class MenuPrincipal:
         print("-"*60)
         
         if not resultados:
-            print("❌ Nenhum resultado encontrado!")
+            print("Nenhum resultado encontrado!")
         else:
             print(f"✓ {len(resultados)} documento(s) encontrado(s):\n")
             for i, (doc_id, nome) in enumerate(resultados, 1):
@@ -257,7 +246,6 @@ class MenuPrincipal:
                 print(f"   {conteudo}...")
     
     def busca_similaridade(self):
-        """Realiza uma busca por similaridade (cosseno)"""
         print("\n" + "="*60)
         print("BUSCA POR SIMILARIDADE (COSSENO)")
         print("="*60)
@@ -279,7 +267,7 @@ class MenuPrincipal:
         print("-"*60)
         
         if not resultados:
-            print("❌ Nenhum resultado encontrado!")
+            print("Nenhum resultado encontrado!")
         else:
             print(f"✓ {len(resultados)} documento(s) encontrado(s):\n")
             print(f"{'Rank':<5} {'Nome':<10} {'Similaridade':<15} {'Conteúdo'}")
@@ -312,7 +300,7 @@ class MenuPrincipal:
         print("-"*60)
         
         if not resultados:
-            print("❌ Nenhum resultado encontrado!")
+            print("Nenhum resultado encontrado!")
         else:
             print(f"✓ {len(resultados)} documento(s) encontrado(s):\n")
             print(f"{'Rank':<5} {'Nome':<10} {'Ocorrências':<15} {'Conteúdo'}")
@@ -323,7 +311,6 @@ class MenuPrincipal:
                 print(f"{i:<5} {nome:<10} {score:<15d} {conteudo}...")
     
     def exibir_estatisticas(self):
-        """Exibe estatísticas da coleção"""
         stats = self.gerenciador.obter_estatisticas()
         
         print("\n" + "="*60)
@@ -335,7 +322,6 @@ class MenuPrincipal:
         print(f"Média de palavras/doc:    {stats['media_palavras_por_doc']:.2f}")
     
     def executar(self):
-        """Executa o programa principal"""
         print("\n" + "="*60)
         print("    CARREGANDO SISTEMA DE INDEXAÇÃO...")
         print("="*60)

@@ -6,17 +6,19 @@ indexação e recuperação de informação que seria capaz de manipular dinamic
 coleção de documentos. O sistema teria que possibilitar a construção e atualização do vocabulário, assim como a construção da matriz TF-IDF e do índice invertido, sempre que documentos fossem inseridos ou removidos. As buscas contemplam consultas booleanas, consultas por 
 similaridade e consultas por frases.
 ***
-
-## Orientações sobre o sistema
-
-- [Código fonte](./main.py)
-- [Manual de uso do sistema](./GUIA_SISTEMA.txt)
-- [Implementação explicada](./LEIA-ME.txt)
+## Integrantes 
+- Ana Alice Cordeiro
+- Bruno de Castro
+- Ester Freitas
+- Fernanda Ferreira
+- João Vitor Feijó
 
 ***
 
 ## Funcionalidades obrigatórias
  
+O sistema deveria possibilitar as seguintes operações:
+
 1) Leitura dos documentos pelo arquivo ‘colecao - trabalho 01.json’. 
 2) Remoção de stopwords e radicalização (bibliotecas podem ser utilizadas). 
 3) Construção e atualização do vocabulário da coleção. 
@@ -33,6 +35,9 @@ ranqueamento dos documentos retornados.
 ***
 
 ## Interações do menu
+
+O usuário tinha que poder acessar as seguintes opções:
+
 1) Adicionar um documento por vez à coleção (seguindo a ordem do JSON). 
 2) Adicionar todos os documentos da lista. 
 3) Remover um documento da coleção pelo seu identificador. 
@@ -46,29 +51,11 @@ ranqueamento dos documentos retornados.
 para o funcionamento do sistema.
 ***
 
-## Fluxo do projeto
-
-### 1 - Pré-processamento do texto
-
-***
-
-### 2 - Estruturas de dados dinâmicas
-
-***
-
-### 3 - Menu
-
-***
-
-### 4 - Consultas
-
-***
-
-### 5 - Interface
-
-
-***
 
 ## Referências
 
 - [Como converter json e dicionários em python](https://www.index.dev/blog/convert-json-to-dictionary-python)
+- [git - desfazendo mudanças locais](https://metring.com.br/git-desfazendo-mudancas-locais#:~:text=Neste%20artigo%20eu%20vou%20falar%20apenas%20sobre,a%20segunda%20desfaz%20completamente%20todas%20as%20altera%C3%A7%C3%B5es.)
+- [Índice invertido em python](https://pt.stackoverflow.com/questions/524013/%C3%8Dndice-invertido-python)
+- [Como processar dados textuais usando o TF-IDF em Python](https://www.freecodecamp.org/portuguese/news/como-processar-dados-textuais-usando-o-tf-idf-em-python/)
+- Plataforma Microsoft Teams - materiais de aula e códigos exemplo da disciplina de Organização e Recuperação da informação
